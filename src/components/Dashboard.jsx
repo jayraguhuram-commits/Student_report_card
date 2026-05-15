@@ -21,7 +21,7 @@ const Dashboard = () => {
     const fetchStudentData = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/student/${currentStudentId}`);
+        const response = await fetch(`/api/student/${currentStudentId}`);
         const resultData = await response.json();
         if (!response.ok) throw new Error(resultData.error || 'Failed to fetch student data');
         setData(resultData);

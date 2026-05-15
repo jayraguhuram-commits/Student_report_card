@@ -4,7 +4,7 @@ import sqlite3
 import os
 import time
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../dist', static_url_path='/')
 CORS(app)  # Allow React dev server to call our API
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "database.db")
@@ -236,6 +236,17 @@ def submit_query():
     conn.close()
 
     return jsonify({"message": "Query submitted successfully"}), 201
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Catch-all Route: Serve React App
+# ─────────────────────────────────────────────────────────────────────────────
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return app.send_static_file(path)
+    else:
+        return app.send_static_file('index.html')
 
 
 if __name__ == "__main__":
